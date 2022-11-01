@@ -1,6 +1,6 @@
-import {LoginRequestModel} from "../models/loginRequestModel";
 
-export const login = ({email, password} : LoginRequestModel) => {
+export const login = (email: string, password: string) => {
+
     return {
         email,
         password

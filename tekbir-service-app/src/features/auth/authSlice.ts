@@ -1,28 +1,61 @@
-import { createSlice } from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import axios from "axios";
+import {UserAuth} from "../../models/User";
+import {ResponseMain} from "../../models/Response";
+import {counterSlice} from "../counter/counterSlice";
 
 export interface AuthState {
-    email: string,
-    password: string
+    user: UserAuth | undefined
+    loading: boolean
+}
+
+const getStorage = () => {
+    const userData = localStorage.getItem('userData');
+    if(userData){
+        return JSON.parse(userData);
+    }else{
+        return undefined
+    }
 }
 
 const initialState: AuthState = {
-    email: '',
-    password: ''
+    user: getStorage(),
+    loading: false
 }
+
+export const login = createAsyncThunk(
+    'user/login',
+    async ( {email,password}: any,thunkAPI) => {
+        const response = await axios.post<ResponseMain<UserAuth>>('https://techservice.quirew.com/User/Login',{
+            email,
+            password
+        });
+
+        return response.data
+    }
+)
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state,action:PayloadAction<AuthState>) => {
-            console.log(action.payload);
+        logout: (state) => {
+            state.user = undefined
+            localStorage.removeItem('userData')
         }
-        ,
     },
+    extraReducers: (builder) => {
+        builder.addCase(login.pending, (state,action) => {state.loading = true})
+        builder.addCase(login.fulfilled,(state,action) => {
+            state.user = action.payload.data
+            state.loading = false
+            localStorage.setItem('userData',JSON.stringify(action.payload.data));
+        })
+    }
 })
 
 // Action creators are generated for each case reducer function
-export const { login } = authSlice.actions
+export const { logout } = authSlice.actions
 
 export default authSlice.reducer

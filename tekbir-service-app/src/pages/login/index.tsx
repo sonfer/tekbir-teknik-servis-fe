@@ -1,20 +1,26 @@
-import React from 'react'
-import type { RootState } from '../../app/store'
+import React, {useEffect} from 'react'
+import type {AppDispatch, RootState} from '../../app/store'
 import { useSelector, useDispatch } from 'react-redux'
 import {login} from "../../features/auth/authSlice";
 import {Button, Checkbox, Form, Input, Row, Col} from 'antd';
-import {LoginRequestModel} from "../../models/loginRequestModel";
+import {User, UserAuth} from "../../models/User";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
+interface LoginForm {
+    email: string,
+    password: string
+}
 
 const Login: React.FC = () => {
-    const user = useSelector((state: RootState) => state.auth)
-    const dispatch = useDispatch()
-
-    console.log(user, 'user')
-
-    const onFinish = (values: LoginRequestModel) => {
-        console.log('Success:', values);
-        dispatch(login(values))
+    const dispatch = useDispatch<AppDispatch>()
+    const auth = useSelector((state: RootState) => state.auth)
+    const onFinish = (values: LoginForm) => {
+        const v = {
+            email: "sonferder@gmail.com",
+            password:"221206"
+        }
+        dispatch(login(v))
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -36,7 +42,7 @@ const Login: React.FC = () => {
                         name="email"
                         rules={[{ required: true, message: 'Please input your email!' }]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item
@@ -52,7 +58,7 @@ const Login: React.FC = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button loading={auth.loading} type="primary" htmlType="submit">
                             Submit
                         </Button>
                     </Form.Item>

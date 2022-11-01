@@ -1,8 +1,11 @@
+import {useDispatch} from "react-redux";
+import {logout} from "../../features/auth/authSlice";
 
 const Main = () => {
+    const dispatch = useDispatch();
     return(
         <div>
-            main
+            <button onClick={() => dispatch(logout())}>Logout</button>
         </div>
     )
 }
