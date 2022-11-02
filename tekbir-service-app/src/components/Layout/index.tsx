@@ -14,8 +14,12 @@ import {
 import type { MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
 import React, {useState} from 'react';
+import Header from "./Header";
+import Sider from "./Sider";
+import {useSelector} from "react-redux";
+import {RootState} from "../../app/store";
+const { Content, Footer } = Layout;
 
-const { Header, Content, Footer, Sider } = Layout;
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -37,33 +41,13 @@ type LayoutCompProp = {
 }
 
 const LayoutComp = (props: LayoutCompProp) => {
-    const [collapsed, setCollapsed] = useState(false);
+    const collapsed = useSelector((state: RootState) => state.layout.collapsed)
 
     return (
         <Layout hasSider>
-            <Sider
-                style={{
-                    overflow: 'auto',
-                    height: '100vh',
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                }}
-                trigger={null}
-                collapsed={collapsed}
-                collapsible
-            >
-                <div className="logo" />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-            </Sider>
+            <Sider />
             <Layout className="site-layout" style={{ marginLeft: collapsed ? 80 : 200 }}>
-                <Header className="site-layout-background" style={{ padding: 0 }} >
-                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                        className: 'trigger',
-                        onClick: () => setCollapsed(!collapsed),
-                    })}
-                </Header>
+                <Header />
                 <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
                     <div className="site-layout-background" style={{ padding: 24}}>
                         {props.children}
