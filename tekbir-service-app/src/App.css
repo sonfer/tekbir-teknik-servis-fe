@@ -1,5 +1,6 @@
-.App {
-  text-align: center;
+@import "styles/index.css";
+.App, #root, .login {
+  height: 100%;
 }
 
 .App-logo {
