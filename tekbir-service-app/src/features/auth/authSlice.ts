@@ -4,30 +4,23 @@ import axios from "axios";
 import {UserAuth} from "../../models/User";
 import {ResponseMain} from "../../models/Response";
 import {counterSlice} from "../counter/counterSlice";
+import {getUserData} from "../../helpers/storage";
 
 export interface AuthState {
     user: UserAuth | undefined
     loading: boolean
 }
 
-const getStorage = () => {
-    const userData = localStorage.getItem('userData');
-    if(userData){
-        return JSON.parse(userData);
-    }else{
-        return undefined
-    }
-}
 
 const initialState: AuthState = {
-    user: getStorage(),
+    user: getUserData(),
     loading: false
 }
 
 export const login = createAsyncThunk(
     'user/login',
     async ( {email,password}: any,thunkAPI) => {
-        const response = await axios.post<ResponseMain<UserAuth>>('https://techservice.quirew.com/User/Login',{
+        const response = await axios.post<ResponseMain<UserAuth>>(`/User/Login`,{
             email,
             password
         });

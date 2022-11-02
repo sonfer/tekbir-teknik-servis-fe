@@ -6,6 +6,9 @@ import 'antd/dist/antd.min.css'
 import Main from "./pages/main";
 import {useSelector} from "react-redux";
 import {RootState} from "./app/store";
+import axios from "axios";
+
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 
 function App() {
   const auth = useSelector((state: RootState) => state.auth)

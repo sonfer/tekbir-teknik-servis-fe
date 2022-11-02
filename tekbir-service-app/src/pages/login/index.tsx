@@ -16,11 +16,7 @@ const Login: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>()
     const auth = useSelector((state: RootState) => state.auth)
     const onFinish = (values: LoginForm) => {
-        const v = {
-            email: "sonferder@gmail.com",
-            password:"221206"
-        }
-        dispatch(login(v))
+        dispatch(login(values))
     };
 
     const onFinishFailed = (errorInfo: any) => {

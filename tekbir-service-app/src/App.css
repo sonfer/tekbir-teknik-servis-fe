@@ -1,3 +1,4 @@
+@import "styles/index.css";
 .App, #root, .login {
   height: 100%;
 }
